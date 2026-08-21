@@ -66,9 +66,14 @@ function renderGroupedBarChart(container, categories, opts) {
  */
 function renderLevelBar(container, actual, target) {
   const pct = target > 0 ? Math.max(0, Math.min(100, (actual / target) * 100)) : 0;
+  // Light violet reads as progress; red is reserved for genuinely low
+  // completion (<50%) — see the .level-bar-fill/.is-low comment in
+  // css/styles.css for why this bar no longer used the section's red accent
+  // unconditionally.
+  const fillClass = 'level-bar-fill' + (pct < 50 ? ' is-low' : '');
   container.innerHTML =
     '<div class="level-bar">' +
-      '<div class="level-bar-fill" style="width:' + pct.toFixed(2) + '%">' +
+      '<div class="' + fillClass + '" style="width:' + pct.toFixed(2) + '%">' +
         '<span>' + actual.toFixed(2) + '</span>' +
       '</div>' +
       '<div class="level-bar-rest"><span>' + Math.max(0, target - actual).toFixed(2) + '</span></div>' +

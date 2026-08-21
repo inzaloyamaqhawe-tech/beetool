@@ -2494,7 +2494,10 @@ function viewPortfolios() {
       '<div class="card-title">Portfolio of Evidence — ' + esc(sc.description) + '</div>' +
       '<p class="muted">One consolidated PDF per person (ID, employment contract and any role-specific documents bundled together) instead of several separate individual submissions.</p>' +
       '<div class="flex-between mb8"><strong>' + progress.done + ' of ' + progress.total + ' Employee PDFs Submitted</strong><span class="muted">' + fmtPct(progress.pct) + '</span></div>' +
-      '<div class="progress-bar"><div class="progress-bar-fill" style="width:' + Math.max(4, progress.pct) + '%">' + (progress.total ? Math.round(progress.pct) + '%' : '') + '</div></div>' +
+      // Light violet reads as progress toward "done"; red is reserved for
+      // genuinely low completion (<50%) — see the .progress-bar-fill/
+      // .is-low comment in css/styles.css.
+      '<div class="progress-bar"><div class="progress-bar-fill' + (progress.pct < 50 ? ' is-low' : '') + '" style="width:' + Math.max(4, progress.pct) + '%">' + (progress.total ? Math.round(progress.pct) + '%' : '') + '</div></div>' +
     '</div>' +
     '<div class="card">' +
       '<div class="table-wrap"><table class="data-table"><thead><tr><th>Person</th><th>Level</th><th>Required documents</th><th>File</th><th>Status</th></tr></thead><tbody>' +

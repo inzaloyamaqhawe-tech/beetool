@@ -39,6 +39,23 @@
   --red-gradient-soft: linear-gradient(135deg, var(--red-300), var(--red-600));
   --red-gradient-deep: linear-gradient(135deg, var(--red-600), var(--red-900));
 
+  /* Light violet — for percentage/progress bars (Level bar, Portfolio
+     completion bar). These bars fill up as something gets MORE complete, so
+     a solid red fill read as "failing" even at 90%+ — red on this app
+     otherwise always means fail/reject/danger (see --danger, .pill-danger,
+     .neg), so a bar that's simply red-because-that's-the-brand-color sent
+     the wrong signal. Light violet reads as neutral/positive progress;
+     #b7a3e8 (already used as the "Max"/"Current" chart-legend swatch in
+     js/app.js) is the same family, so this isn't a new hue for the app, just
+     a new use of one already established. Red is reserved for genuinely low
+     completion (<50%, see .is-low below) — the one case where "this needs
+     attention" is the accurate reading. */
+  --violet-300: #e4d6fb;
+  --violet-400: #c7aef2;
+  --violet-600: #8a5cd6;
+  --violet-800: #5b32a3;
+  --violet-gradient: linear-gradient(135deg, var(--violet-400), var(--violet-600));
+
   /* ---- aliases (used throughout the file / generated markup) ---- */
   --navy: var(--ink);
   --navy-dark: var(--ink-strong);
@@ -305,7 +322,15 @@ table.data-table td input.input, table.data-table td select.input { padding: 5px
 /* A slim pill-track, not a thick two-tone gradient block — a refined meter,
    not a loud dashboard widget. */
 .level-bar { display: flex; height: 22px; border-radius: 999px; overflow: hidden; background: var(--grey-150, var(--grey-200)); }
-.level-bar-fill { background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-weight: 700; font-size: 11px; min-width: 34px; }
+/* Light violet by default — same reasoning as .progress-bar-fill above: this
+   bar fills toward the NEXT level (more score = more full), so it should
+   read as progress, not failure. It previously used var(--accent), which is
+   always some shade of red across every section — see "Section accent"
+   above — so it looked identical to a warning regardless of how close to
+   the next level you actually were. .is-low switches it back to red only
+   when you're genuinely under halfway there. */
+.level-bar-fill { background: var(--violet-gradient); color: #fff; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-weight: 700; font-size: 11px; min-width: 34px; transition: width 0.2s ease, background 0.2s ease; }
+.level-bar-fill.is-low { background: var(--red-gradient); }
 .level-bar-rest { background: transparent; color: var(--text-muted); flex: 1; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-size: 11px; font-weight: 600; }
 
 /* ---------------------------------- Badges/pills ---------------------------------- */
@@ -429,7 +454,12 @@ table.data-table td input.input, table.data-table td select.input { padding: 5px
 /* ---------------------------------- Progress bar (Portfolios) ------------------- */
 
 .progress-bar { height: 22px; border-radius: 999px; background: var(--grey-200); overflow: hidden; display: flex; align-items: center; }
-.progress-bar-fill { height: 100%; background: var(--red-gradient); display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; color: #fff; font-size: 11px; font-weight: 700; min-width: 26px; transition: width 0.2s ease; }
+/* Light violet by default (this bar fills up as more evidence gets
+   submitted — the opposite of a failing state); .is-low switches it to red
+   only when completion is genuinely low (<50%, see viewPortfolios() in
+   js/app.js), where red's usual "needs attention" meaning is accurate. */
+.progress-bar-fill { height: 100%; background: var(--violet-gradient); display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; color: #fff; font-size: 11px; font-weight: 700; min-width: 26px; transition: width 0.2s ease, background 0.2s ease; }
+.progress-bar-fill.is-low { background: var(--red-gradient); }
 
 /* ---------------------------------- Portfolio dropzone --------------------------- */
 
