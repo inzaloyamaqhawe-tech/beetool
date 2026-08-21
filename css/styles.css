@@ -30,22 +30,26 @@
   --grey-500: #918d86;
   --grey-700: #4a453f;
   /* Rose/crimson red scale — replaces the old pure/orange-leaning red
-     (#c81913 etc.) with the rose-crimson family actually used in Centenary's
-     Training Proposal document. red-400 and red-600 are the document's own
-     two accent colors verbatim (#e0475f / #b21a35, extracted from its PDF
-     content stream — same hue, ~350°, at two different lightnesses); every
-     other step is generated at that same hue/saturation so the whole ramp
-     reads as one consistent family rather than red-600 being an outlier. */
-  --red-50:  #fdf0f2;
-  --red-100: #f9d7dd;
-  --red-200: #f3b4bf;
-  --red-300: #ea7b8d;
-  --red-400: #e0475f;
-  --red-500: #d4213f;
-  --red-600: #b21a35;
-  --red-700: #92172b;
-  --red-800: #751223;
-  --red-900: #5a0e1b;
+     (#c81913 etc.) with the family actually used in Centenary's Training
+     Proposal document. red-500 is the document's own BRIGHT accent color
+     verbatim (#e0475f, extracted from its PDF content stream) and is the
+     new default (--accent/--danger, below) — the document's other, darker
+     accent (#b21a35) read as too close to maroon once used as the app's
+     everyday color, so it's kept only as a deep/hover shade (~red-800) that
+     rarely shows, not the default. Every other step is generated at the
+     same hue (~350°) so the whole ramp still reads as one family; the
+     darkest rung is capped brighter than before (L 32%, was 20%) so nothing
+     in the app — not even a hover or "danger" state — drifts into maroon. */
+  --red-50:  #fcedf0;
+  --red-100: #f9d8dd;
+  --red-200: #f4b9c3;
+  --red-300: #ed91a1;
+  --red-400: #e76a7f;
+  --red-500: #e0475f;
+  --red-600: #db2442;
+  --red-700: #c11f3a;
+  --red-800: #a71b32;
+  --red-900: #8c172a;
   --red-gradient: linear-gradient(135deg, var(--red-400), var(--red-700));
   --red-gradient-soft: linear-gradient(135deg, var(--red-300), var(--red-600));
   --red-gradient-deep: linear-gradient(135deg, var(--red-600), var(--red-900));
@@ -82,14 +86,14 @@
   --border: var(--grey-200);
   --text: var(--ink);
   --text-muted: var(--grey-500);
-  --danger: var(--red-600);
+  --danger: var(--red-500);
   --success: #1f9254;
   --warn: #b8860b;
   --radius: 10px;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 2px 14px rgba(0, 0, 0, 0.05);
 
   /* ---- per-section accent (see "Section accent" below) ---- */
-  --accent: var(--red-600);
+  --accent: var(--red-500);
   --accent-soft: var(--red-50);
   --accent-deep: var(--red-800);
 
@@ -97,14 +101,16 @@
      not just a lighter/darker version of the same red — all kept
      high-saturation and WCAG AA-checked against white so none of them
      drifts toward the dull, brownish look maroon has. Re-centered on the
-     Training Proposal document's rose/crimson hue (~350°) instead of the
-     old wheel's sweep out into orange (vermillion/coral) — scorecards'
-     "brand anchor" is the document's own primary accent color verbatim. */
-  --accent-dashboard: #b01c41;  --accent-dashboard-soft: #fcf0f3;  --accent-dashboard-deep: #75122b;  /* rose */
-  --accent-scorecards: #b21a35; --accent-scorecards-soft: #fdf0f2; --accent-scorecards-deep: #751223; /* crimson — brand anchor, matches the document exactly */
-  --accent-targets: #b01c28;    --accent-targets-soft: #fcf0f1;    --accent-targets-deep: #75121a;    /* deep crimson */
-  --accent-portfolios: #b01c52; --accent-portfolios-soft: #fcf0f4; --accent-portfolios-deep: #751236; /* magenta-rose */
-  --accent-planning: #b01c21;   --accent-planning-soft: #fcf0f0;   --accent-planning-deep: #751216;   /* ruby */
+     Training Proposal document's rose/crimson hue (~350°), and pinned
+     bright/light (L 58%) rather than dark — the document's darker accent
+     read as too close to maroon once it became the app's everyday color
+     (see the red-500 comment above), so "brand anchor" now matches the
+     document's BRIGHT accent color exactly, not its darker one. */
+  --accent-dashboard: #e1476d;  --accent-dashboard-soft: #fcedf1;  --accent-dashboard-deep: #a71b3e;  /* rose */
+  --accent-scorecards: #e0475f; --accent-scorecards-soft: #fcedf0; --accent-scorecards-deep: #a71b32; /* bright crimson — brand anchor, matches the document exactly */
+  --accent-targets: #e14754;    --accent-targets-soft: #fcedef;    --accent-targets-deep: #a71b27;    /* bright coral-crimson */
+  --accent-portfolios: #e1477f; --accent-portfolios-soft: #fcedf3; --accent-portfolios-deep: #a71b4e; /* bright magenta-rose */
+  --accent-planning: #e1474c;   --accent-planning-soft: #fcedee;   --accent-planning-deep: #a71b20;   /* bright ruby */
 }
 
 /* ---------------------------------- Section accent ----------------------------
@@ -352,7 +358,7 @@ table.data-table td input.input, table.data-table td select.input { padding: 5px
 .pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
 .pill-teal { background: rgba(31,146,84,0.12); color: var(--success); }
 .pill-gold { background: rgba(184,134,11,0.14); color: #8a6a0a; }
-.pill-danger { background: rgba(178,26,53,0.10); color: var(--red-700); }
+.pill-danger { background: rgba(224,71,95,0.10); color: var(--red-700); }
 .pill-muted { background: var(--grey-100); color: var(--text-muted); }
 
 /* ---------------------------------- Charts ---------------------------------------- */
@@ -488,7 +494,7 @@ table.data-table td input.input, table.data-table td select.input { padding: 5px
 .portfolio-status-missing { background: var(--grey-100); color: var(--text-muted); }
 .portfolio-status-uploaded { background: #fbeecb; color: #8a6a2c; }
 .portfolio-status-approved { background: rgba(31,146,84,0.14); color: var(--success); }
-.portfolio-status-rejected { background: rgba(178,26,53,0.10); color: var(--red-700); }
+.portfolio-status-rejected { background: rgba(224,71,95,0.10); color: var(--red-700); }
 
 .badge-required { display: inline-block; background: var(--grey-100); border: 1px solid var(--grey-200); color: var(--grey-700); border-radius: 4px; padding: 2px 7px; font-size: 10.5px; font-weight: 700; margin: 2px 3px 2px 0; }
 
