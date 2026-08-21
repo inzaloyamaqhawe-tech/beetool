@@ -1,0 +1,10 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+
+# No build step / no dependencies for this project (pure static HTML/CSS/JS),
+# so there's no node_modules or dist/ to ignore. backend/api/db.php ships
+# with REPLACE_WITH_* placeholders only — see the comment at its top; never
+# replace those with real Xneelo credentials in a file that gets committed.

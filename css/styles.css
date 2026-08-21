@@ -1,0 +1,466 @@
+/* ==========================================================================
+   Centenary Networks — B-BBEE Scorecard Tool
+   styles.css
+
+   Palette: clean white/grey (Apple-platform style) with black/near-black
+   text and a red gradient as the single accent — several different red
+   tones across icons/buttons/bars ("multi red gradient"), never maroon
+   (kept a true, slightly warm red hue at every step, not the brownish-
+   purple undertone maroon has). Green/amber are kept ONLY for pass/fail
+   and warning semantics (gap margins, status pills) — never as brand chrome.
+
+   Old variable names (--navy, --teal, --blue, --blue-tab) are kept as
+   aliases pointing at the new palette so every component below (and every
+   inline var(--x) reference generated from js/app.js) re-themes without a
+   file-by-file rewrite.
+   ========================================================================== */
+
+:root {
+  /* ---- new palette ---- */
+  --ink: #1d1d1f;
+  --ink-strong: #000000;
+  --grey-50: #fafafa;
+  --grey-100: #f5f5f7;
+  --grey-200: #e8e8ed;
+  --grey-300: #d2d2d7;
+  --grey-500: #86868b;
+  --grey-700: #48484a;
+  --red-50:  #fff1f0;
+  --red-100: #ffdedc;
+  --red-200: #ffb8b4;
+  --red-300: #ff8a85;
+  --red-400: #f24d46;
+  --red-500: #e0221c;
+  --red-600: #c81913;
+  --red-700: #a11310;
+  --red-800: #850f0c;
+  --red-900: #6e0c09;
+  --red-gradient: linear-gradient(135deg, var(--red-400), var(--red-700));
+  --red-gradient-soft: linear-gradient(135deg, var(--red-300), var(--red-600));
+  --red-gradient-deep: linear-gradient(135deg, var(--red-600), var(--red-900));
+
+  /* ---- aliases (used throughout the file / generated markup) ---- */
+  --navy: var(--ink);
+  --navy-dark: var(--ink-strong);
+  --gold: #b8860b;
+  --gold-light: #e9d8a6;
+  --teal: var(--red-500);
+  --teal-dark: var(--red-700);
+  --blue: var(--red-300);
+  --blue-tab: var(--red-600);
+
+  --bg: var(--grey-100);
+  --card: #ffffff;
+  --border: var(--grey-200);
+  --text: var(--ink);
+  --text-muted: var(--grey-500);
+  --danger: var(--red-600);
+  --success: #1f9254;
+  --warn: #b8860b;
+  --radius: 10px;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 2px 14px rgba(0, 0, 0, 0.05);
+
+  /* ---- per-section accent (see "Section accent" below) ---- */
+  --accent: var(--red-600);
+  --accent-soft: var(--red-50);
+  --accent-deep: var(--red-800);
+
+  /* Each top-level area's own point on the red wheel — a small hue shift,
+     not just a lighter/darker version of the same red — all kept
+     high-saturation and WCAG AA-checked against white so none of them
+     drifts toward the dull, brownish look maroon has. */
+  --accent-dashboard: #d81b4a;  --accent-dashboard-soft: #fdeef2;  --accent-dashboard-deep: #a01238;  /* rose-red */
+  --accent-scorecards: #c81913; --accent-scorecards-soft: #fff1f0; --accent-scorecards-deep: #850f0c; /* signal red — brand anchor */
+  --accent-targets: #d2361a;    --accent-targets-soft: #fdece6;    --accent-targets-deep: #9c2712;    /* vermillion */
+  --accent-portfolios: #a81336; --accent-portfolios-soft: #fbe9ee; --accent-portfolios-deep: #780d27; /* ruby */
+  --accent-planning: #c93c1a;   --accent-planning-soft: #fdece3;   --accent-planning-deep: #96290f;   /* coral-red */
+}
+
+/* ---------------------------------- Section accent ----------------------------
+   "Different red appearances depending on the page/section." js/app.js sets
+   data-section on <body> per route, which retints links/buttons/underlines/
+   the card-title tick for whichever page you're on. The two nav mega-menus
+   (Scorecards' quick-switcher, Planning's Scenarios/Implementation grouping)
+   are scoped separately so each always shows ITS OWN destination's colour
+   as a wayfinding cue, regardless of which page you're currently browsing. */
+body[data-section="dashboard"]  { --accent: var(--accent-dashboard);  --accent-soft: var(--accent-dashboard-soft);  --accent-deep: var(--accent-dashboard-deep); }
+body[data-section="scorecards"] { --accent: var(--accent-scorecards); --accent-soft: var(--accent-scorecards-soft); --accent-deep: var(--accent-scorecards-deep); }
+body[data-section="targets"]    { --accent: var(--accent-targets);    --accent-soft: var(--accent-targets-soft);    --accent-deep: var(--accent-targets-deep); }
+body[data-section="portfolios"] { --accent: var(--accent-portfolios); --accent-soft: var(--accent-portfolios-soft); --accent-deep: var(--accent-portfolios-deep); }
+body[data-section="planning"]   { --accent: var(--accent-planning);   --accent-soft: var(--accent-planning-soft);   --accent-deep: var(--accent-planning-deep); }
+
+.mainnav-item[data-section="dashboard"]      { --accent: var(--accent-dashboard);  --accent-soft: var(--accent-dashboard-soft);  --accent-deep: var(--accent-dashboard-deep); }
+.mainnav-dropdown[data-section="scorecards"] { --accent: var(--accent-scorecards); --accent-soft: var(--accent-scorecards-soft); --accent-deep: var(--accent-scorecards-deep); }
+.mainnav-item[data-section="targets"]        { --accent: var(--accent-targets);    --accent-soft: var(--accent-targets-soft);    --accent-deep: var(--accent-targets-deep); }
+.mainnav-item[data-section="portfolios"]     { --accent: var(--accent-portfolios); --accent-soft: var(--accent-portfolios-soft); --accent-deep: var(--accent-portfolios-deep); }
+.mainnav-dropdown[data-section="planning"]   { --accent: var(--accent-planning);   --accent-soft: var(--accent-planning-soft);   --accent-deep: var(--accent-planning-deep); }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1, h2, h3, h4 { margin: 0 0 8px; font-weight: 700; color: var(--ink); }
+button { font-family: inherit; cursor: pointer; }
+input, select, textarea { font-family: inherit; font-size: 14px; }
+
+.app-shell { min-height: 100vh; display: flex; flex-direction: column; }
+.app-main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 24px 16px; }
+
+/* ---------------------------------- Top bar (brand + primary nav, merged) ------ */
+
+.topbar {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 40;
+}
+.topbar-inner {
+  max-width: 1320px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; gap: 32px; flex-wrap: wrap;
+  min-height: 64px;
+}
+.brand { display: flex; align-items: center; gap: 10px; cursor: pointer; flex: none; }
+.brand svg { display: block; }
+.brand-logo { display: block; height: 40px; width: auto; flex: none; }
+.brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.brand-name { font-weight: 700; letter-spacing: -0.2px; color: var(--ink); font-size: 15px; }
+.brand-crumb { font-size: 11px; color: var(--text-muted); }
+
+/* Real primary navigation, inline in the header — like a company website,
+   not a boxed "switch to" tool panel below it. Text-first: no icon badges
+   on the top-level links, an underline signals hover/active instead. */
+.mainnav { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+.mainnav-item {
+  display: inline-flex; align-items: center; gap: 5px; color: var(--ink); font-weight: 600;
+  background: none; border: none; font-size: 14px; font-family: inherit; cursor: pointer;
+  padding: 10px 4px; position: relative; line-height: 1;
+}
+.mainnav-item::after {
+  content: ''; position: absolute; left: 4px; right: 4px; bottom: 4px; height: 2px;
+  background: var(--accent); transform: scaleX(0); transition: transform 0.15s ease; transform-origin: left;
+}
+.mainnav-item:hover { text-decoration: none; color: var(--ink); }
+.mainnav-item:hover::after { transform: scaleX(1); }
+.mainnav-item.active { color: var(--accent); }
+.mainnav-item.active::after { transform: scaleX(1); }
+.mainnav-caret { width: 7px; height: 7px; border-right: 1.6px solid currentColor; border-bottom: 1.6px solid currentColor; transform: rotate(45deg); margin-left: -1px; margin-top: -3px; opacity: 0.55; }
+
+/* Utility controls (Accounts, Team) — sit right after the primary nav at the
+   far right edge, set off with a hairline divider like a real site's
+   account/session controls rather than mixed into the page navigation. */
+.topbar-utility { display: flex; align-items: center; gap: 4px; margin-left: 14px; padding-left: 14px; border-left: 1px solid var(--border); flex: none; }
+.topbar-utility .mainnav-item { font-size: 13px; color: var(--text-muted); }
+.topbar-utility .mainnav-item:hover { color: var(--ink); }
+.topbar-utility .mega-menu { left: auto; right: -10px; min-width: 260px; }
+.mega-menu-note { padding: 8px 12px 4px; font-size: 11.5px; color: var(--text-muted); line-height: 1.4; }
+
+/* Mega-menu — a real "product menu" card panel (Scorecards' quick-switch,
+   and Planning's Scenarios/Implementation Plan grouping), not a plain list. */
+.mainnav-dropdown { position: relative; }
+.mainnav-dropdown > .mainnav-item { cursor: pointer; }
+.mega-menu {
+  display: none; position: absolute; top: calc(100% + 4px); left: -14px; min-width: 300px; z-index: 50;
+  background: #ffffff; border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+  padding: 10px; flex-direction: column;
+}
+.mainnav-dropdown.open .mega-menu { display: flex; }
+.mega-item {
+  display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border-radius: 10px; color: var(--text);
+}
+.mega-item:hover { background: var(--accent-soft); text-decoration: none; }
+.mega-item.active { background: var(--accent-soft); }
+.mega-ico {
+  width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center;
+  color: var(--accent); background: var(--accent-soft); flex: none; margin-top: 1px;
+}
+.mega-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mega-title { font-weight: 700; font-size: 13.5px; color: var(--ink); }
+.mega-desc { font-size: 12px; color: var(--text-muted); line-height: 1.35; }
+.mega-divider { height: 1px; background: var(--border); margin: 6px 4px; }
+.mega-heading { font-size: 10.5px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-muted); padding: 8px 12px 2px; }
+
+/* ---------------------------------- Scorecard section dropdown ----------------- */
+
+.tab-select-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.tab-select-back { font-size: 13px; font-weight: 600; color: var(--accent); white-space: nowrap; }
+.tab-select { max-width: 320px; font-weight: 700; }
+
+/* ---------------------------------- Tab bar (underline style) ------------------ */
+
+.tabbar-wrap { background: transparent; border: none; border-bottom: 1px solid var(--border); border-radius: 0; box-shadow: none; overflow-x: auto; margin-bottom: 20px; }
+.tabbar { display: flex; background: transparent; flex-wrap: nowrap; gap: 4px; }
+.tabbar a, .tabbar button.tab-btn {
+  background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); padding: 12px 14px; font-size: 13px; font-weight: 600;
+  text-align: center; flex: none; white-space: nowrap;
+  line-height: 1.25; margin-bottom: -1px;
+}
+.tabbar a:hover, .tabbar button.tab-btn:hover { color: var(--ink); text-decoration: none; }
+.tabbar a.active, .tabbar button.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ---------------------------------- Cards ------------------------------------- */
+
+.card {
+  background: var(--card); border: 1px solid var(--grey-200); border-radius: 18px;
+  box-shadow: none; padding: 24px; margin-bottom: 16px;
+}
+.card-flush { padding: 0; overflow: hidden; }
+.card-row { display: flex; gap: 16px; flex-wrap: wrap; }
+.card-row > .card { flex: 1 1 320px; }
+/* A small red tick beside the title, not an icon-badge or a grey box — ties
+   every module back to the brand without repeating the "icon in a colour
+   circle" motif used in the nav on every single card header too. */
+.card-title { font-size: 12px; font-weight: 700; letter-spacing: 0.6px; color: var(--text-muted); margin-bottom: 14px; text-transform: uppercase; padding-left: 12px; position: relative; }
+.card-title::before { content: ''; position: absolute; left: 0; top: 1px; bottom: 1px; width: 3px; border-radius: 2px; background: var(--accent); }
+.section-title { font-size: 20px; font-weight: 700; letter-spacing: -0.2px; color: var(--ink); margin-bottom: 4px; }
+.muted { color: var(--text-muted); }
+.small { font-size: 12px; }
+
+/* ---------------------------------- Hero band (Dashboard) ---------------------- */
+
+/* Full-bleed white masthead, no card border at all — an editorial section,
+   not another dashboard widget. Modules that are genuinely clickable
+   navigation tiles (Scenario Planner etc.) still use .card below it; pure
+   headline/summary content does not. */
+.hero-band { background: #ffffff; border-bottom: 1px solid var(--border); width: 100vw; margin: -24px calc(50% - 50vw) 28px; padding: 44px 0 36px; }
+.hero-band-inner { max-width: 1320px; margin: 0 auto; padding: 0 16px; }
+.hero-eyebrow { font-size: 11.5px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--text-muted); }
+.hero-heading { font-size: 34px; font-weight: 700; letter-spacing: -0.7px; color: var(--ink); margin: 4px 0 6px; }
+
+/* Typographic stat row — a number, a thin divider, a label. Not another
+   grey box inside a box. */
+.stat-row { display: flex; gap: 0; flex-wrap: wrap; padding: 22px 24px; }
+.stat-tile { background: none; border: none; border-right: 1px solid var(--grey-200); border-radius: 0; padding: 0 28px; min-width: 110px; }
+.stat-tile:last-child { border-right: none; }
+.stat-tile .num { font-size: 28px; font-weight: 700; letter-spacing: -0.4px; color: var(--ink); }
+.stat-tile .lbl { font-size: 11px; font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+
+/* ---------------------------------- Buttons (pill CTAs) ------------------------ */
+
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; border: 1px solid transparent; border-radius: 999px;
+  padding: 10px 20px; font-weight: 600; font-size: 13px; background: var(--accent); color: #fff;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.btn:hover { background: var(--accent-deep); text-decoration: none; transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn-outline { background: transparent; color: var(--accent); border-color: var(--grey-300); }
+.btn-outline:hover { background: var(--accent-soft); border-color: var(--grey-300); }
+.btn-danger { background: var(--red-800); }
+.btn-danger:hover { background: var(--red-900); }
+.btn-ghost { background: transparent; color: var(--text-muted); border-color: var(--border); }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+.btn-navy { background: var(--ink); }
+.btn-navy:hover { background: var(--ink-strong); }
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn svg, .mega-ico svg { display: block; }
+
+/* ---------------------------------- Forms -------------------------------------- */
+
+.field { margin-bottom: 16px; }
+.field label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: var(--text); }
+.field .hint { font-size: 11.5px; color: var(--text-muted); margin-top: 4px; }
+.input, select.input, textarea.input {
+  width: 100%; border: 1px solid var(--grey-300); border-radius: 7px; padding: 9px 10px; background: #fff; color: var(--text);
+}
+.input:focus, select.input:focus, textarea.input:focus { outline: 2px solid var(--red-200); border-color: var(--red-400); }
+.input-prefix-wrap { display: flex; align-items: stretch; border: 1px solid var(--grey-300); border-radius: 7px; overflow: hidden; background: #fff; }
+.input-prefix-wrap .prefix { background: var(--grey-100); padding: 9px 10px; color: var(--text-muted); font-weight: 600; border-right: 1px solid var(--grey-300); }
+.input-prefix-wrap input { border: none; flex: 1; padding: 9px 10px; min-width: 0; }
+.input-prefix-wrap input:focus { outline: none; }
+.field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.checkbox-row { display: flex; align-items: center; gap: 8px; }
+.checkbox-row input { width: 16px; height: 16px; }
+
+/* ---------------------------------- Tables ------------------------------------- */
+
+.table-wrap { overflow-x: auto; }
+table.data-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
+table.data-table th {
+  text-align: left; font-size: 11px; letter-spacing: 0.3px; text-transform: uppercase; color: var(--text-muted);
+  border-bottom: 2px solid var(--border); padding: 8px 10px; white-space: nowrap;
+}
+table.data-table td { padding: 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+table.data-table tr:nth-child(even) td { background: var(--grey-50); }
+table.data-table td.num, table.data-table th.num { text-align: right; }
+table.data-table td input.input, table.data-table td select.input { padding: 5px 7px; }
+.section-subhead { font-weight: 700; color: var(--ink); padding-top: 14px; }
+.row-actions { display: flex; gap: 6px; white-space: nowrap; }
+
+/* ---------------------------------- Score inspector ----------------------------- */
+
+.gap-margin { position: relative; width: 100%; min-width: 120px; height: 14px; }
+.gap-margin-track { position: absolute; inset: 0; border-radius: 4px; background: linear-gradient(to right, var(--red-400) 0%, var(--red-400) 18%, #f4d06b 18%, #f4d06b 40%, #7cc98a 40%, #7cc98a 60%, #f4d06b 60%, #f4d06b 82%, var(--red-400) 82%, var(--red-400) 100%); opacity: 0.85; }
+.gap-margin-dot { position: absolute; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--ink); transform: translateX(-50%); border: 2px solid #fff; }
+.pos { color: var(--success); font-weight: 700; }
+.neg { color: var(--red-600); font-weight: 700; }
+
+/* ---------------------------------- Level bar ------------------------------------ */
+
+/* A slim pill-track, not a thick two-tone gradient block — a refined meter,
+   not a loud dashboard widget. */
+.level-bar { display: flex; height: 22px; border-radius: 999px; overflow: hidden; background: var(--grey-150, var(--grey-200)); }
+.level-bar-fill { background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-weight: 700; font-size: 11px; min-width: 34px; }
+.level-bar-rest { background: transparent; color: var(--text-muted); flex: 1; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-size: 11px; font-weight: 600; }
+
+/* ---------------------------------- Badges/pills ---------------------------------- */
+
+.pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.pill-teal { background: rgba(31,146,84,0.12); color: var(--success); }
+.pill-gold { background: rgba(184,134,11,0.14); color: #8a6a0a; }
+.pill-danger { background: rgba(200,25,19,0.10); color: var(--red-700); }
+.pill-muted { background: var(--grey-100); color: var(--text-muted); }
+
+/* ---------------------------------- Charts ---------------------------------------- */
+
+.chart-svg { width: 100%; height: auto; }
+.chart-grid { stroke: var(--grey-200); stroke-width: 1; }
+.chart-axis { stroke: var(--grey-300); stroke-width: 1; }
+.chart-axis-label { font-size: 10px; fill: var(--text-muted); font-family: inherit; }
+.chart-bar-actual { fill: var(--red-500); }
+.chart-bar-max { fill: var(--grey-300); }
+.chart-legend { display: flex; gap: 18px; align-items: center; justify-content: center; margin-bottom: 6px; font-size: 12px; color: var(--text-muted); }
+.chart-legend .swatch { width: 12px; height: 12px; border-radius: 2px; display: inline-block; margin-right: 6px; vertical-align: -2px; }
+
+/* ---------------------------------- Dashboard grid -------------------------------- */
+
+.dash-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+.dash-grid .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 900px) {
+  .dash-grid { grid-template-columns: 1fr; }
+  .dash-grid .card-row { grid-template-columns: 1fr; }
+}
+
+/* ---------------------------------- Footer ---------------------------------------- */
+
+.footer {
+  border-top: 1px solid var(--border); background: var(--card); margin-top: auto;
+  padding: 14px 16px; font-size: 12.5px; color: var(--text-muted);
+}
+.footer-inner { max-width: 1320px; margin: 0 auto; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.footer strong { color: var(--ink); }
+
+/* ---------------------------------- Misc ------------------------------------------ */
+
+.flex { display: flex; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.flex-gap { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.mt8 { margin-top: 8px; } .mt12 { margin-top: 12px; } .mt16 { margin-top: 16px; } .mt24 { margin-top: 24px; }
+.mb8 { margin-bottom: 8px; } .mb0 { margin-bottom: 0; }
+.divider { height: 1px; background: var(--border); margin: 16px 0; }
+.empty-state { text-align: center; padding: 30px 10px; color: var(--text-muted); }
+.disclaimer {
+  background: #fbf6ea; border: 1px solid #ecdfba; color: #7a5f22; border-radius: 6px; padding: 10px 14px; font-size: 12px;
+}
+.help-callout { background: rgba(31,146,84,0.07); border: 1px solid rgba(31,146,84,0.22); border-radius: 6px; padding: 14px; font-size: 13px; color: #1a7a45; }
+.chip { display: inline-block; background: var(--grey-100); border-radius: 4px; padding: 4px 8px; font-size: 11.5px; font-weight: 700; color: var(--text); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.two-col > * { min-width: 0; }
+@media (max-width: 760px) { .two-col { grid-template-columns: 1fr; } }
+
+/* Grid/flex children must be allowed to shrink below their content's intrinsic
+   width, or a wide table inside (via .table-wrap's own overflow-x) pushes the
+   whole page wider instead of scrolling within its own card. */
+.card-row > .card, .dash-grid > *, .kv-list > div { min-width: 0; }
+
+.scenario-slider-row { display: grid; grid-template-columns: 220px 1fr 90px; gap: 14px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.scenario-slider-row input[type="range"] { width: 100%; accent-color: var(--accent); }
+@media (max-width: 640px) { .scenario-slider-row { grid-template-columns: 1fr; gap: 4px; } }
+
+.subtab-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.subtab-row button { background: var(--grey-100); border: 1px solid var(--border); border-radius: 5px; padding: 8px 14px; font-weight: 600; font-size: 12.5px; color: var(--text); }
+.subtab-row button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.status-badge { padding: 3px 9px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+.status-not-started { background: var(--grey-100); color: var(--text-muted); }
+.status-in-progress { background: #fbeecb; color: #8a6a2c; }
+.status-done { background: rgba(31,146,84,0.14); color: var(--success); }
+
+.kv-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; font-size: 13px; }
+.kv-list div span.k { display: block; color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; }
+.kv-list div span.v { font-weight: 700; color: var(--ink); }
+
+@media (max-width: 640px) {
+  .app-main { padding: 10px; }
+  .card { padding: 14px; }
+  .stat-row { padding: 12px; }
+}
+
+@media (max-width: 480px) {
+  /* The full logo + "Centenary Networks" + crumb block doesn't fit next to
+     the nav at phone widths — shrink it rather than let it force page-level
+     horizontal scroll. */
+  .topbar-inner { padding: 0 12px; gap: 8px; }
+  .brand-logo { height: 30px; }
+  .brand-name { font-size: 13px; }
+  .brand-crumb { display: none; }
+  .topbar-utility { margin-left: 8px; padding-left: 8px; }
+}
+
+/* ---------------------------------- Save bar ---------------------------------- */
+
+.save-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  background: #fff; border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius);
+  padding: 10px 16px; margin-bottom: 16px; box-shadow: var(--shadow); font-size: 12.5px; color: var(--text-muted);
+}
+.save-bar.dirty { background: #fbf6ea; border-color: #ecdfba; }
+
+/* ---------------------------------- Print (PDF export) ------------------------- */
+
+#print-root { display: none; }
+@media print {
+  body > *:not(#print-root) { display: none !important; }
+  #print-root { display: block !important; }
+  #print-root .print-header { display: flex; align-items: center; gap: 16px; border-bottom: 2px solid #000; padding-bottom: 12px; margin-bottom: 16px; }
+  #print-root .print-header img { height: 56px; width: auto; }
+  #print-root table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 12px; }
+  #print-root th, #print-root td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; }
+  #print-root th { background: var(--grey-100); }
+  #print-root h1, #print-root h2, #print-root h3 { color: #000; }
+  #print-root .print-footer { margin-top: 24px; font-size: 11px; color: #666; }
+}
+
+/* ---------------------------------- Progress bar (Portfolios) ------------------- */
+
+.progress-bar { height: 22px; border-radius: 999px; background: var(--grey-200); overflow: hidden; display: flex; align-items: center; }
+.progress-bar-fill { height: 100%; background: var(--red-gradient); display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; color: #fff; font-size: 11px; font-weight: 700; min-width: 26px; transition: width 0.2s ease; }
+
+/* ---------------------------------- Portfolio dropzone --------------------------- */
+
+.dropzone {
+  border: 1.5px dashed var(--grey-300); border-radius: 8px; padding: 10px 12px; text-align: center;
+  font-size: 12px; color: var(--text-muted); background: var(--grey-50); cursor: pointer; min-width: 160px;
+}
+.dropzone:hover, .dropzone.dragover { border-color: var(--red-400); background: var(--red-50); color: var(--red-700); }
+.dropzone input[type="file"] { display: none; }
+.dropzone .dz-filename { color: var(--ink); font-weight: 600; }
+
+.portfolio-status-missing { background: var(--grey-100); color: var(--text-muted); }
+.portfolio-status-uploaded { background: #fbeecb; color: #8a6a2c; }
+.portfolio-status-approved { background: rgba(31,146,84,0.14); color: var(--success); }
+.portfolio-status-rejected { background: rgba(200,25,19,0.10); color: var(--red-700); }
+
+.badge-required { display: inline-block; background: var(--grey-100); border: 1px solid var(--grey-200); color: var(--grey-700); border-radius: 4px; padding: 2px 7px; font-size: 10.5px; font-weight: 700; margin: 2px 3px 2px 0; }
+
+/* ---------------------------------- Modal (PDF preview) -------------------------- */
+
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200;
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.modal {
+  background: #fff; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  width: 100%; max-width: 820px; max-height: 92vh; display: flex; flex-direction: column; overflow: hidden;
+}
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+.modal-header h3 { margin: 0; font-size: 15px; }
+.modal-close { background: none; border: none; color: var(--text-muted); font-size: 20px; line-height: 1; padding: 4px; cursor: pointer; }
+.modal-close:hover { color: var(--red-600); }
+.modal-body { flex: 1; overflow: auto; padding: 0; background: var(--grey-100); }
+.modal-body iframe { width: 100%; height: 70vh; border: none; display: block; }

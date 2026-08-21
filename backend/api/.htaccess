@@ -1,0 +1,44 @@
+# Centenary Networks — B-BBEE Scorecard Tool
+# Maps the clean REST paths documented in BACKEND.md (e.g. GET /api/scorecards/:id)
+# onto the actual .php files in this folder, which is what makes those paths
+# work at all — without this, only /api/scorecards.php would respond, not
+# /api/scorecards. Deploy this whole api/ folder as your site's /api/ path
+# (e.g. upload it to public_html/api/ on Xneelo).
+#
+# More specific rules (portfolio) are listed before the general
+# /scorecards/:id catch-all on purpose — mod_rewrite uses the first rule
+# that matches, so order matters here.
+
+# Needed so $_SERVER['PATH_INFO'] (which scorecards.php/tasks.php/
+# scenarios.php read to get the :id from the URL) actually gets populated —
+# not every Apache config turns this on by default.
+AcceptPathInfo On
+
+RewriteEngine On
+
+# Portfolio of Evidence uploads — /api/scorecards/:id/people/:personId/portfolio
+RewriteRule ^scorecards/([^/]+)/people/([^/]+)/portfolio$ portfolio.php?scorecard_id=$1&person_id=$2 [QSA,L]
+
+# Auth — /api/auth/login, /api/auth/logout, /api/auth/me
+RewriteRule ^auth/(.+)$ auth.php?action=$1 [QSA,L]
+
+# Session/account switch — /api/session/account
+RewriteRule ^session/account$ accounts.php [QSA,L]
+
+# Accounts — /api/accounts
+RewriteRule ^accounts$ accounts.php [QSA,L]
+
+# Scorecards — /api/scorecards and /api/scorecards/:id
+RewriteRule ^scorecards$ scorecards.php [QSA,L]
+RewriteRule ^scorecards/(.+)$ scorecards.php/$1 [QSA,L]
+
+# Implementation Plan tasks — /api/tasks and /api/tasks/:id
+RewriteRule ^tasks$ tasks.php [QSA,L]
+RewriteRule ^tasks/(.+)$ tasks.php/$1 [QSA,L]
+
+# Scenarios — /api/scenarios and /api/scenarios/:id
+RewriteRule ^scenarios$ scenarios.php [QSA,L]
+RewriteRule ^scenarios/(.+)$ scenarios.php/$1 [QSA,L]
+
+# Health check — /api/health
+RewriteRule ^health$ health.php [QSA,L]
